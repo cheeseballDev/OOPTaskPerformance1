@@ -63,7 +63,6 @@ class AmountDue implements Runnable {
         userInput.close();
     }
 
-    //what if it uses two methods after?
     void checkItemQuantity() {
         Scanner userInput = new Scanner(System.in);
         while(true) {
@@ -165,6 +164,7 @@ class AmountDue implements Runnable {
     }
 
     void printErrorContainsInvalidCharacters() {
+        clearScreen();
         System.out.print("Input contains invalid characters, please try again. ");
         char[] characters = {'.', ' ', '.', ' ', '.', ' ', '.'};
 
