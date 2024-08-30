@@ -21,10 +21,84 @@ class AmountDue implements Runnable {
             int userValue = checkIfUserValueIsValid(userChoice);
             userValueTypeOfCompute(userValue);
         } catch (Exception e) {
-            clearScreen();
-            System.out.print("Invalid input, please try again.");
-            pause(3000);
+            printErrorInvalidInput();
+            pause(1500);
             printUserInstructions();
+        }
+        userInput.close();
+    }
+
+    void userValueTypeOfCompute(int value) {
+        //pass values to each other.
+        switch(value) {
+            case 1:
+                checkItemPrice();
+                break;
+            case 2:
+                checkItemQuantity();
+                break;
+            case 3:
+                checkItemDiscountAmount();
+                break;
+        }
+    }
+
+    /*
+     *  CHECK FOR ERROR METHODS 
+     */
+
+    void checkItemPrice() {
+        Scanner userInput = new Scanner(System.in);
+        while(true) {
+            try {
+                double itemPrice = userInput.nextDouble();
+                double finalPrice = computeAmountDue(itemPrice);
+                System.out.print("Amount due is " + finalPrice);
+                break;
+            } catch (Exception e) {
+                printErrorContainsInvalidCharacters();
+                continue;
+            }
+        }
+        userInput.close();
+    }
+
+    //what if it uses two methods after?
+    void checkItemQuantity() {
+        Scanner userInput = new Scanner(System.in);
+        while(true) {
+            try {
+                String itemPriceAndQuantity = userInput.nextLine();
+                String[] itemPriceAndQuantitySplit = itemPriceAndQuantity.split(" ");
+                double itemPriceDouble = Double.parseDouble(itemPriceAndQuantitySplit[0]);
+                int itemQuantity = Integer.parseInt(itemPriceAndQuantitySplit[1]);
+                double finalPrice = computeAmountDue(itemPriceDouble, itemQuantity);
+                System.out.print("Amount due is " + finalPrice);
+                break;
+            } catch (Exception e) {
+                printErrorContainsInvalidCharacters();
+                continue;
+            }
+        }
+        userInput.close();
+    }
+
+    void checkItemDiscountAmount() {
+        Scanner userInput = new Scanner(System.in);
+        while(true) {
+            try {
+                String itemPriceAndQuantity = userInput.nextLine();
+                String[] itemPriceAndQuantitySplit = itemPriceAndQuantity.split(" ");
+                double itemPriceDouble = Double.parseDouble(itemPriceAndQuantitySplit[0]);
+                int itemQuantity = Integer.parseInt(itemPriceAndQuantitySplit[1]);
+                float itemDiscount = Float.parseFloat(itemPriceAndQuantitySplit[2]);
+                double finalPrice = computeAmountDue(itemPriceDouble, itemQuantity, itemDiscount);
+                System.out.print("Amount due is " + finalPrice);
+                break;
+            } catch (Exception e) {
+                printErrorContainsInvalidCharacters();
+                continue;
+            }
         }
         userInput.close();
     }
@@ -32,25 +106,11 @@ class AmountDue implements Runnable {
     int checkIfUserValueIsValid(int value) {
         if(!(value == 1 || value == 2 || value == 3)){
             clearScreen();
-            System.out.print("Please enter a number ranging from 1 - 3");
-            pause(3000);
+            printErrorInvalidNumber();
+            pause(1500);
             printUserInstructions();
         }
         return value;
-    }
-
-    void userValueTypeOfCompute(int value) {
-        switch(value) {
-            case 1:
-                System.out.println("1");
-                break;
-            case 2:
-                System.out.println("2");
-                break;
-            case 3:
-                System.out.println("3");
-                break;
-        }
     }
 
     /*
@@ -58,29 +118,66 @@ class AmountDue implements Runnable {
      */
 
     double computeAmountDue(double price){
-        
+        double taxAmount = price * 0.12;
+        price += taxAmount;
         return price;
     }
 
-    int computeAmountDue(int quantity) {
-        int total = 0;
-
-        return total;
+    double computeAmountDue(double price, int quantity) {
+        double taxAmount = price * 0.12;
+        double priceAndQuantity = price * quantity;
+        priceAndQuantity += taxAmount;
+        return priceAndQuantity;
     }
 
-    float computeAmountDue(float discountAmount) {
-        float total = 0;
-
-        return total;
+    double computeAmountDue(double price, int quantity, float discountAmount) {
+        double taxAmount = price * 0.12;
+        double priceAndQuantity = price * quantity;
+        double discountedAmount = priceAndQuantity - discountAmount;
+        discountedAmount += taxAmount;
+        return discountedAmount;
     }
 
     /*
      *  MISC METHODS
      */
 
+    void printErrorInvalidInput() {
+        clearScreen();
+        System.out.print("Invalid input, please try again. ");
+        char[] characters = {'.',' ', '.', ' ', '.', ' ', '.'};
+
+        for(int i = 0; i < characters.length; i++) {
+            System.out.print(characters[i]);
+            pause(300);
+        }
+    }
+
+    void printErrorInvalidNumber() {
+        clearScreen();
+        System.out.print("Please enter a number ranging from 1 - 3, please try again. ");
+        char[] characters = {'.', ' ', '.', ' ', '.', ' ', '.'};
+
+        for(int i = 0; i < characters.length; i++) {
+            System.out.print(characters[i]);
+            pause(300);
+        }
+    }
+
+    void printErrorContainsInvalidCharacters() {
+        System.out.print("Input contains invalid characters, please try again. ");
+        char[] characters = {'.', ' ', '.', ' ', '.', ' ', '.'};
+
+        for(int i = 0; i < characters.length; i++) {
+            System.out.print(characters[i]);
+            pause(300);
+        }
+        System.out.print("\n");
+    }
+
     @Override
     public void run() {
-        pause(3000);
+        pause(0);
     }
 
     void pause(int milliseconds) {
