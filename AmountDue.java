@@ -2,9 +2,7 @@ package OOPTaskPerformance;
 import java.util.Scanner;
 
 class AmountDue implements Runnable {
-
-    private int userChoice;
-
+    
     void printUserInstructions() {
         clearScreen();
         System.out.println("Press any of the following then enter values separated by spaces: ");
@@ -17,7 +15,7 @@ class AmountDue implements Runnable {
     void userSelectValue() {
         Scanner userInput = new Scanner(System.in);
         try {
-            userChoice = userInput.nextInt();
+            int userChoice = userInput.nextInt();
             int userValue = checkIfUserValueIsValid(userChoice);
             userValueTypeOfCompute(userValue);
         } catch (Exception e) {
